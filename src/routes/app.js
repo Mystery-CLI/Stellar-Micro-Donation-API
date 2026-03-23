@@ -30,6 +30,7 @@ const log = require('../utils/log');
 const requestId = require('../middleware/requestId');
 const serviceContainer = require('../config/serviceContainer');
 const { payloadSizeLimiter } = require('../middleware/payloadSizeLimit');
+const { createCorsMiddleware } = require('../middleware/cors');
 const {
   logStartupDiagnostics,
   logShutdownDiagnostics,
@@ -47,6 +48,9 @@ let replayCleanupTimer = null;
 
 // Middleware
 app.use(requestId);
+
+// CORS (must be before body parsers and route handlers)
+app.use(createCorsMiddleware());
 
 // Payload size limit (must be before body parsers)
 app.use(payloadSizeLimiter);
